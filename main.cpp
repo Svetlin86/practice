@@ -11,8 +11,8 @@ void findMaxNegative(const int K[], int L, int& maxNegative, int& index);
 void printArray(const int K[], int L);
 
 int main() {
-    constexpr int MAX_ARRAY_SIZE = 30;
-    int K[MAX_ARRAY_SIZE], L, choice;
+    constexpr int MAX_SIZE = 30;
+    int K[MAX_SIZE], L, choice;
     string input;
     bool arrayEntered = false;
 
@@ -45,7 +45,7 @@ int main() {
                         cout << "Menu za izchisleniq" << endl;
                         cout << "1. Izchislete sredna stoinost na chisla, delimi na 6" << endl;
                         cout << "2. Namerete maksimalnoto otritsatelno chislo i negoviya indeks" << endl;
-                        cout << "3. Nazad" << endl;
+                        cout << "3. Izhod" << endl;
                         cout << "Izberi opciq: ";
                         cin >> input;
 
@@ -138,7 +138,7 @@ void setSizeOfArrayAndInsertNumbers(int K[], int& L) {
                 K[i] = stoi(array_input);
                 break;
             }
-            cout << "nevalidno izbor" << endl;
+            cout << "nevaliden izbor" << endl;
         }
     }
 }
