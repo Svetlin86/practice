@@ -11,6 +11,7 @@ void findMaxNegative(const int K[], int L, int &maxNegative, int &index);
 
 void printArray(const int K[], int L);
 
+//new
 int main() {
     constexpr int MAX_SIZE = 30;
     int K[MAX_SIZE], L, choice;
