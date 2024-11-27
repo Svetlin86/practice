@@ -1,32 +1,27 @@
 #include <iostream>
-
-#include <math.h>
+#include <cmath>
+#include <limits>
 using namespace std;
 
 void pause();
 bool isInteger(const string& input);
-void setSizeOfArrayAndInsertNumbers(int Z[], int& L);
-double calculateAverageNegativeInInterval(const int Z[], int L, double min, double max);
-void calculateProductOfNonZeroElements(const int Z[], int L, double& product);
-void countZeroElements(const int Z[], int L, int& zeroCount);
-void printArray(const int Z[], int L);
-
+void setSizeOfArrayAndInsertNumbers(int K[], int& L);
+double calculateMeanDivisibleBySix(const int K[], int L);
+void findMaxNegative(const int K[], int L, int& maxNegative, int& index);
+void printArray(const int K[], int L);
 
 int main() {
-
     constexpr int MAX_ARRAY_SIZE = 30;
-    int Z[MAX_ARRAY_SIZE], L, choice;
+    int K[MAX_ARRAY_SIZE], L, choice;
     string input;
-    int zeroCount;
-    double product, min, max;
     bool arrayEntered = false;
 
     do {
-        cout << "\n Menu\n" << endl;
-        cout << "1. Dobavi elementi v K(L)\n" << endl;
-        cout << "2. Izchsleniq\n" << endl;
-        cout << "3. Izhod\n" << endl;
-        cout << "Izberi opciq " << endl;
+        cout << "Menu" << endl;
+        cout << "1. Vuvedi elementi ot masiva" << endl;
+        cout << "2. Izchsleniq" << endl;
+        cout << "3. Izhod" << endl;
+        cout << "Izberi opciq: ";
         cin >> input;
 
         if (isInteger(input)) {
@@ -34,116 +29,82 @@ int main() {
 
             switch (choice) {
                 case 1: {
-                    cout << "Izberi razmer na masiva (1 do 30):" << endl;
-                    setSizeOfArrayAndInsertNumbers(Z, L);
+                    cout << "Vuvedi razmer na masiva (1 to 30):" << endl;
+                    setSizeOfArrayAndInsertNumbers(K, L);
                     arrayEntered = true;
                     break;
                 }
                 case 2: {
                     if (!arrayEntered) {
-                        cout << "Pyrvo izberete razmer na masiva\n" << endl;
+                        cout << "Purvo suzdai masiv." << endl;
                         pause();
                         break;
                     }
+
                     do {
-                        cout << "\nОПЕРАЦИОННО МЕНЮ\n" << endl;
-                        cout << "1. Izchislyavane na srednoaritmetichnoto na otritsatelnite chisla v interval\n" << endl;
-                        cout << "2. Izchislyavane na proizvedenieto na nenulevite chisla\n" << endl;
-                        cout << "3. Broya na nulevite element\n" << endl;
-                        cout << "4. Nazad\n" << endl;
-                        cout << "Izberete operatsiya: " << endl;
+                        cout << "Menu za izchisleniq" << endl;
+                        cout << "1. Izchislete sredna stoinost na chisla, delimi na 6" << endl;
+                        cout << "2. Namerete maksimalnoto otritsatelno chislo i negoviya indeks" << endl;
+                        cout << "3. Nazad" << endl;
+                        cout << "Izberi opciq: ";
                         cin >> input;
 
                         if (isInteger(input)) {
                             choice = stoi(input);
+
                             switch (choice) {
                                 case 1: {
-                                    cout << "Въведете минимална стойност за интервала: " << endl;
-                                    cin >> min;
-                                    while (cin.fail()) {
-                                        cin.clear();
-                                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                        cout << "Невалиден вход! Моля, въведете валидна минимална стойност: " << endl;
-                                        cin >> min;
-                                    }
-
-                                    cout << "Въведете максимална стойност за интервала: " << endl;
-                                    cin >> max;
-                                    while (cin.fail()) {
-                                        cin.clear();
-                                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                                        cout << "Невалиден вход! Моля, въведете валидна максимална стойност: " << endl;
-                                        cin >> max;
-                                    }
-
-                                    cout << "\n***********************************************************" << endl;
-
-                                    const double avg = calculateAverageNegativeInInterval(Z, L, min, max);
-
-                                    if (avg != 0) {
-                                        cout << "Средноаритметичното на отрицателните числа в интервала [" << min <<
-                                                ", " <<
-                                                max
-                                                <<
-                                                "] е: \n" << avg << endl;
+                                    double mean = calculateMeanDivisibleBySix(K, L);
+                                    if (mean != 0) {
+                                        cout << "Srednata stoĭnost na chislata, delimi na 6, e:  " << mean << endl;
                                     } else {
-                                        cout << "Няма отрицателни числа в този интервал!\n" << endl;
+                                        cout << "V masiva nyama chisla, delimi na 6.";
                                     }
-                                    cout << "Елементите на масива са: " << endl;
-                                    printArray(Z, L);
-                                    cout << "***********************************************************\n" << endl;
+                                    printArray(K, L);
                                     pause();
                                     break;
                                 }
                                 case 2: {
-                                    calculateProductOfNonZeroElements(Z, L, product);
-                                    cout << "\n***********************************************************" << endl;
-                                    cout << "Произведението на ненулевите елементи е: \n" << product << endl;
-
-                                    cout << "Елементите на масива са: " << endl;
-                                    printArray(Z, L);
-                                    cout << "***********************************************************\n" << endl;
+                                    int maxNegative, index;
+                                    findMaxNegative(K, L, maxNegative, index);
+                                    if (index != -1) {
+                                        cout << "Maksimalnoto otritsatelno chislo e " << maxNegative
+                                             << " na index " << index << "." << endl;
+                                    } else {
+                                        cout << "Nyama otritsatelni chisla v masiva.";
+                                    }
+                                    printArray(K, L);
                                     pause();
                                     break;
                                 }
                                 case 3: {
-                                    countZeroElements(Z, L, zeroCount);
-                                    cout << "\n***********************************************************" << endl;
-                                    cout << "Броят на нулевите елементи е: \n" << zeroCount << endl;
-                                    cout << "Елементите на масива са: " << endl;
-                                    printArray(Z, L);
-                                    cout << "***********************************************************\n" << endl;
-                                    pause();
-                                    break;
-                                }
-                                case 4: {
                                     break;
                                 }
                                 default: {
-                                    cout << "Невалидна опция! Опитайте отново.\n" << endl;
+                                    cout << "Nevalidna optsiya! Opitaite otnovo.";
                                     pause();
                                     break;
                                 }
                             }
                         } else {
-                            cout << "Невалиден вход! Oпитайте отново.\n" << endl;
+                            cout << "Nevalidna opciq";
                             pause();
                         }
-                    } while (choice != 4);
+                    } while (choice != 3);
                     break;
                 }
                 case 3: {
-                    cout << "Изход от програмата!\n" << endl;
+                    cout << "Izlizane ot programata." << endl;
                     break;
                 }
                 default: {
-                    cout << "Невалидна опция! Опитайте отново.\n" << endl;
+                    cout << "Nevalidna opciq";
                     pause();
                     break;
                 }
             }
         } else {
-            cout << "Невалиден вход! Oпитайте отново.\n" << endl;
+            cout << "Nevalidna opciq";
             pause();
         }
     } while (choice != 3);
@@ -151,7 +112,7 @@ int main() {
     return 0;
 }
 
-void setSizeOfArrayAndInsertNumbers(int Z[], int &L) {
+void setSizeOfArrayAndInsertNumbers(int K[], int& L) {
     string array_input;
 
     while (true) {
@@ -162,78 +123,69 @@ void setSizeOfArrayAndInsertNumbers(int Z[], int &L) {
             if (L > 0 && L <= 30) {
                 break;
             }
-            cout << "Невалиден размер на масива! Моля, въведете цяло число между 1 и 30." << endl;
+            cout << "Nevaliden razmer na masiva! Vuvedete chislo mezhdu 1 i 30." << endl;
             continue;
         }
-        cout << "Невалиден вход! Моля, въведете цяло число между 1 и 30." << endl;
+        cout << "Nevaliden razmer na masiva! Vŭvedete tsyalo chislo mezhdu 1 i 30." << endl;
     }
 
     for (int i = 0; i < L; ++i) {
         while (true) {
-            cout << "Въведете Z[" << i << "]: "<<endl;
+            cout << "Vuvedi K[" << i << "]: ";
             cin >> array_input;
 
             if (isInteger(array_input)) {
-                Z[i] = stoi(array_input);
+                K[i] = stoi(array_input);
                 break;
             }
-            cout << "Невалиден вход! Моля, въведете цяло число." << endl;
+            cout << "nevalidno izbor" << endl;
         }
     }
 }
 
-double calculateAverageNegativeInInterval(const int Z[], const int L, const double min, const double max) {
-    double sum = 0.0;
+double calculateMeanDivisibleBySix(const int K[], int L) {
+    double sum = 0;
     int count = 0;
+
     for (int i = 0; i < L; ++i) {
-        if (Z[i] < 0 && Z[i] >= min && Z[i] <= max) {
-            sum += Z[i];
+        if (K[i] % 6 == 0) {
+            sum += K[i];
             count++;
         }
     }
+
     if (count == 0) {
         return 0;
     }
     return sum / count;
 }
 
-void calculateProductOfNonZeroElements(const int Z[], const int L, double &product) {
-    product = 1.0;
-    bool hasNonZero = false;
-    for (int i = 0; i < L; ++i) {
-        if (Z[i] != 0) {
-            product *= Z[i];
-            hasNonZero = true;
-        }
-    }
-    if (!hasNonZero) {
-        product = 0;
-    }
-}
+void findMaxNegative(const int K[], int L, int& maxNegative, int& index) {
+    maxNegative = numeric_limits<int>::min();
+    index = -1;
 
-void countZeroElements(const int Z[],const int L ,int &zeroCount) {
-    zeroCount = 0;
     for (int i = 0; i < L; ++i) {
-        if (Z[i] == 0) {
-            zeroCount++;
+        if (K[i] < 0 && K[i] > maxNegative) {
+            maxNegative = K[i];
+            index = i;
         }
     }
 }
 
-void printArray(const int Z[], int L) {
+void printArray(const int K[], int L) {
     for (int i = 0; i < L; ++i) {
-        cout << Z[i] << " ";
+        cout << K[i] << " ";
     }
     cout << endl;
 }
 
 void pause() {
-    cout << "Натиснете клавиш за да продължите...\n";
+    cout << "Natisnete proizvolen buton...\n";
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     cin.get();
 }
 
-bool isInteger(const string &input) {
+bool isInteger(const string& input) {
     size_t start = 0;
     if (input[0] == '-') {
         start = 1;
